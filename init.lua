@@ -27,3 +27,25 @@ USA
 
 ]]
 
+minetest.register_chatcommand("clouds", {
+	params = "[height <height>]",
+	description = "Control cloud appearance",
+	func = function(caller, param)
+
+		-- guaranteed to exist?
+		local player = minetest.get_player_by_name(caller)
+
+		param = param:trim()
+		-- bare minimum: setting your own height
+		local height = string.match(param, 'height +(%d+)')
+		if height then
+			player:set_clouds({
+				height = height,
+			})
+
+			return true, "Clouds height set to " .. height
+        else
+			return false, "Invalid usage, see /help clouds"
+		end
+	end,
+})
