@@ -27,25 +27,55 @@ USA
 
 ]]
 
+local function parse(param)
+	local settings = {}
+
+	param = param:trim()
+
+	local density = string.match(param, 'density +([%d.]+)')
+	if density then
+		settings.density = density
+	end
+
+	local color = string.match(param, 'color +(#[0-9a-f]+)')
+	if color then
+		settings.color = color
+	end
+
+	local ambient = string.match(param, 'ambient +(#[0-9a-f]+)')
+	if ambient then
+		settings.ambient = ambient
+	end
+
+	local height = string.match(param, 'height +([%d.]+)')
+	if height then
+		settings.height = height
+	end
+
+	local thickness = string.match(param, 'thickness +([%d.]+)')
+	if thickness then
+		settings.thickness = thickness
+	end
+
+	local speed_x, speed_z = string.match(param, 'speed +([%d.-]+) +([%d.-]+)')
+	if speed_z then
+		settings.speed = { x = speed_x, y = speed_z, z = speed_z }
+	end
+
+	return settings
+end
+
 minetest.register_chatcommand("clouds", {
-	params = "[height <height>]",
+	params = "[density <num>] [color <#col>] [ambient <#col>] [height <num>] [thickness <num>] [speed <x> <z>]",
 	description = "Control cloud appearance",
 	func = function(caller, param)
 
 		-- guaranteed to exist?
 		local player = minetest.get_player_by_name(caller)
+		local settings = parse(param)
 
-		param = param:trim()
-		-- bare minimum: setting your own height
-		local height = string.match(param, 'height +(%d+)')
-		if height then
-			player:set_clouds({
-				height = height,
-			})
+		player:set_clouds(settings)
 
-			return true, "Clouds height set to " .. height
-        else
-			return false, "Invalid usage, see /help clouds"
-		end
+		return true, "Clouds set"
 	end,
 })
