@@ -27,7 +27,7 @@ USA
 
 ]]
 
-local function parse(param)
+local function parse_clouds(param)
 	local settings = {}
 
 	param = param:trim()
@@ -65,6 +65,43 @@ local function parse(param)
 	return settings
 end
 
+local function format_color(color)
+	if color.a then
+		return string.format('#%02x%02x%02x%02x', color.a, color.r, color.g, color.b)
+	else
+		return string.format('#%02x%02x%02x', color.r, color.g, color.b)
+	end
+end
+
+local function format_clouds(settings)
+	local param = ""
+	if settings.density then
+		param = param .. "density " .. settings.density .. " "
+	end
+	if settings.color then
+		param = param .. "color " .. format_color(settings.color) .. " "
+	end
+	if settings.ambient then
+		param = param .. "ambient " .. format_color(settings.ambient) .. " "
+	end
+	if settings.height then
+		param = param .. "height " .. settings.height .. " "
+	end
+	if settings.thickness then
+		param = param .. "thickness " .. settings.thickness .. " "
+	end
+	if settings.speed then
+		param = param .. "speed " .. settings.speed.x .. " "
+		if settings.speed.y then
+			param = param .. settings.speed.y .. " "
+	    else
+			param = param .. settings.speed.z .. " "
+	    end
+    end
+	param = param:trim()
+	return param
+end
+
 minetest.register_chatcommand("clouds", {
 	params = "[density <num>] [color <#col>] [ambient <#col>] [height <num>] [thickness <num>] [speed <x> <z>]",
 	description = "Control cloud appearance",
@@ -72,10 +109,11 @@ minetest.register_chatcommand("clouds", {
 
 		-- guaranteed to exist?
 		local player = minetest.get_player_by_name(caller)
-		local settings = parse(param)
+		local settings = parse_clouds(param)
 
 		player:set_clouds(settings)
+		settings = player:get_clouds()
 
-		return true, "Clouds set"
+		return true, "Clouds set " .. format_clouds(settings)
 	end,
 })
