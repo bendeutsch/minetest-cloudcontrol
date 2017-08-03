@@ -76,7 +76,7 @@ end
 local function format_clouds(settings)
 	local param = ""
 	if settings.density then
-		param = param .. "density " .. settings.density .. " "
+		param = param .. "density " .. string.format('%.2f', settings.density) .. " "
 	end
 	if settings.color then
 		param = param .. "color " .. format_color(settings.color) .. " "
@@ -85,17 +85,17 @@ local function format_clouds(settings)
 		param = param .. "ambient " .. format_color(settings.ambient) .. " "
 	end
 	if settings.height then
-		param = param .. "height " .. settings.height .. " "
+		param = param .. "height " .. string.format('%.2f', settings.height) .. " "
 	end
 	if settings.thickness then
-		param = param .. "thickness " .. settings.thickness .. " "
+		param = param .. "thickness " .. string.format('%.2f', settings.thickness) .. " "
 	end
 	if settings.speed then
-		param = param .. "speed " .. settings.speed.x .. " "
+		param = param .. "speed " .. string.format('%.2f', settings.speed.x) .. " "
 		if settings.speed.y then
-			param = param .. settings.speed.y .. " "
+			param = param .. string.format('%.2f', settings.speed.y) .. " "
 	    else
-			param = param .. settings.speed.z .. " "
+			param = param .. string.format('%.2f', settings.speed.z) .. " "
 	    end
     end
 	param = param:trim()
@@ -116,7 +116,7 @@ minetest.register_chatcommand("clouds", {
 
 		local cloudstring = format_clouds(settings)
 		player:set_attribute('cloudcontrol:settings', cloudstring)
-		return true, "Clouds set " .. cloudstring
+		return true, "Clouds set: " .. cloudstring
 	end,
 })
 
