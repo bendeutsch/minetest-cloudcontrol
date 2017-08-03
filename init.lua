@@ -67,7 +67,7 @@ end
 
 local function format_color(color)
 	if color.a then
-		return string.format('#%02x%02x%02x%02x', color.a, color.r, color.g, color.b)
+		return string.format('#%02x%02x%02x%02x', color.r, color.g, color.b, color.a)
 	else
 		return string.format('#%02x%02x%02x', color.r, color.g, color.b)
 	end
