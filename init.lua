@@ -114,6 +114,15 @@ minetest.register_chatcommand("clouds", {
 		player:set_clouds(settings)
 		settings = player:get_clouds()
 
-		return true, "Clouds set " .. format_clouds(settings)
+		local cloudstring = format_clouds(settings)
+		player:set_attribute('cloudcontrol:settings', cloudstring)
+		return true, "Clouds set " .. cloudstring
 	end,
 })
+
+minetest.register_on_joinplayer(function(player)
+	local cloudstring = player:get_attribute('cloudcontrol:settings')
+	if cloudstring then
+		player:set_clouds(parse_clouds(cloudstring))
+	end
+end)
