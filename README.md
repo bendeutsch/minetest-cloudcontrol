@@ -2,7 +2,7 @@
 
 Simple cloud control mod for Minetest.
 
-Version: 0.1.0
+Version: 1.0.0
 
 License:
   Code: LGPL 2.1 (see included LICENSE file)
